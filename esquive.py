@@ -1,35 +1,36 @@
 """ The game where u need to avoid balls """
 import pygame as pygame
-import display_class as display
 
 class Player:
     """ The player """
     def __init__(self, pos:list, dim:list):
         self.pos = pos
-        self.dim = [0,0,dim[0],dim[1]]
-        self.rect = pygame.Rect(pos[0], pos[1], self.dim[2]-self.dim[0], self.dim[3]-self.dim[1])
-    
+        self.dim = dim
+        self.rect = pygame.Rect(pos[0], pos[1], dim[0], dim[1])
+
     def draw(self,screen:pygame.Surface):
         """ Draw the player """
+        self.pos = [round(self.pos[0]), round(self.pos[1])]
+        self.rect = pygame.Rect(self.pos[0], self.pos[1], self.dim[0], self.dim[1])
         pygame.draw.rect(screen, (0,0,0), self.rect)
 
-def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
-
+def esquive_game(screen:pygame.Surface, RUNNING:bool, coef:tuple)-> None:
+    ''' In this game u want to avoid enemies falling from the sky '''
     # Initialisation des variables
-    player = Player([1920*coef[0]//2, 1080*coef[1]//2], [20*coef[0], 20*coef[1]])
+    player = Player([1920*coef[0]//4, 1080*coef[1]//4], [50*coef[0], 100*coef[1]])
     mov_up = False
     mov_down = False
     mov_left = False
     mov_right = False
 
     # Boucle while
-    while running :
+    while RUNNING :
         screen.fill((120,50,70))
         player.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_e:
-                    running = False
+                    RUNNING = False
                 if event.key == pygame.K_UP:
                     mov_up = True
                 if event.key == pygame.K_DOWN:
@@ -47,7 +48,7 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
                     mov_left = False
                 if event.key == pygame.K_RIGHT:
                     mov_right = False
-        
+
         # Gestion des mouvements
         if mov_up:
             player.pos[1] -= 1*coef[1]
@@ -58,5 +59,4 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
         if mov_right:
             player.pos[0] += 1*coef[0]
 
-        print(player.pos, player.dim)
         pygame.display.update()
