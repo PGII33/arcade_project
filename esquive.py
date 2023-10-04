@@ -17,7 +17,15 @@ class Player:
 def esquive_game(screen:pygame.Surface, RUNNING:bool, coef:tuple)-> None:
     ''' In this game u want to avoid enemies falling from the sky '''
     # Initialisation des variables
-    player = Player([1920*coef[0]//4, 1080*coef[1]//4], [50*coef[0], 100*coef[1]])
+
+    BORDER_LEFT = 0
+    BORDER_RIGHT = 1920*coef[0] * 2/3
+    BORDER_UP = 0
+    BORDER_DOWN = 1080*coef[1] * 2/3
+    PLAYER_WIDTH = 50*coef[1]
+    PLAYER_HEIGHT = 100*coef[0]
+    
+    player = Player([1920*coef[0]* 2/6 - PLAYER_WIDTH /2, 1080*coef[1]*2/3  - PLAYER_HEIGHT], [PLAYER_WIDTH, PLAYER_HEIGHT] )
     mov_up = False
     mov_down = False
     mov_left = False
@@ -50,13 +58,13 @@ def esquive_game(screen:pygame.Surface, RUNNING:bool, coef:tuple)-> None:
                     mov_right = False
 
         # Gestion des mouvements
-        if mov_up:
+        if mov_up and BORDER_UP < player.pos[1] - 1*coef[1]:
             player.pos[1] -= 1*coef[1]
-        if mov_down:
+        if mov_down and BORDER_DOWN - PLAYER_HEIGHT > player.pos[1] + 1*coef[1] :
             player.pos[1] += 1*coef[1]
-        if mov_left:
+        if mov_left and BORDER_LEFT < player.pos[0] - 1*coef[0]:
             player.pos[0] -= 1*coef[0]
-        if mov_right:
+        if mov_right and BORDER_RIGHT - PLAYER_WIDTH > player.pos[0] + 1*coef[0]:
             player.pos[0] += 1*coef[0]
 
         pygame.display.update()

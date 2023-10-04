@@ -13,7 +13,7 @@ coef = (WEIGHT_COEF, HEIGHT_COEF)
 pygame.quit()
 
 pygame.init()
-screen = pygame.display.set_mode((SCREEN_WEIGHT//2, SCREEN_HEIGHT//2))
+screen = pygame.display.set_mode((SCREEN_WEIGHT//1.5, SCREEN_HEIGHT//1.5))
 
 RUNNING = True
 while RUNNING:
