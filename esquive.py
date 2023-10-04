@@ -14,16 +14,18 @@ class Player:
         self.rect = pygame.Rect(self.pos[0], self.pos[1], self.dim[0], self.dim[1])
         pygame.draw.rect(screen, (0,0,0), self.rect)
 
-def esquive_game(screen:pygame.Surface, RUNNING:bool, coef:tuple)-> None:
+def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
     ''' In this game u want to avoid enemies falling from the sky '''
-    # Initialisation des variables
-
+    # Variables
     BORDER_LEFT = 0
     BORDER_RIGHT = 1920*coef[0] * 2/3
     BORDER_UP = 0
     BORDER_DOWN = 1080*coef[1] * 2/3
     PLAYER_WIDTH = 50*coef[1]
     PLAYER_HEIGHT = 100*coef[0]
+    
+    mov_speed_x = 10*coef[0]
+    mov_speed_y = 10*coef[1]
     
     player = Player([1920*coef[0]* 2/6 - PLAYER_WIDTH /2, 1080*coef[1]*2/3  - PLAYER_HEIGHT], [PLAYER_WIDTH, PLAYER_HEIGHT] )
     mov_up = False
@@ -32,13 +34,19 @@ def esquive_game(screen:pygame.Surface, RUNNING:bool, coef:tuple)-> None:
     mov_right = False
 
     # Boucle while
-    while RUNNING :
+    while running :
+        
+        # Gestion des fps
+        clock = pygame.time.Clock()
+        clock.tick(60)
+        
+        # Gestion des evenements
         screen.fill((120,50,70))
         player.draw(screen)
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_e:
-                    RUNNING = False
+                    running = False
                 if event.key == pygame.K_UP:
                     mov_up = True
                 if event.key == pygame.K_DOWN:
@@ -57,14 +65,14 @@ def esquive_game(screen:pygame.Surface, RUNNING:bool, coef:tuple)-> None:
                 if event.key == pygame.K_RIGHT:
                     mov_right = False
 
-        # Gestion des mouvements
+        # Gestion des mouvements et des collisions
         if mov_up and BORDER_UP < player.pos[1] - 1*coef[1]:
-            player.pos[1] -= 1*coef[1]
+            player.pos[1] -= mov_speed_y
         if mov_down and BORDER_DOWN - PLAYER_HEIGHT > player.pos[1] + 1*coef[1] :
-            player.pos[1] += 1*coef[1]
+            player.pos[1] += mov_speed_y
         if mov_left and BORDER_LEFT < player.pos[0] - 1*coef[0]:
-            player.pos[0] -= 1*coef[0]
+            player.pos[0] -= mov_speed_x
         if mov_right and BORDER_RIGHT - PLAYER_WIDTH > player.pos[0] + 1*coef[0]:
-            player.pos[0] += 1*coef[0]
+            player.pos[0] += mov_speed_x
 
         pygame.display.update()

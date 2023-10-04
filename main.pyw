@@ -3,7 +3,6 @@ import pygame
 import esquive
 
 #To get the screen values
-
 pygame.init()
 screen = pygame.display.set_mode()
 SCREEN_WEIGHT, SCREEN_HEIGHT = screen.get_size()
