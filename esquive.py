@@ -3,16 +3,20 @@ import pygame as pygame
 
 class Player:
     """ The player """
-    def __init__(self, pos:list, dim:list):
+    def __init__(self, pos:list, dim:list) -> None:
         self.pos = pos
         self.dim = dim
         self.rect = pygame.Rect(pos[0], pos[1], dim[0], dim[1])
 
-    def draw(self,screen:pygame.Surface):
+    def draw(self, screen:pygame.Surface) -> None:
         """ Draw the player """
         self.pos = [round(self.pos[0]), round(self.pos[1])]
         self.rect = pygame.Rect(self.pos[0], self.pos[1], self.dim[0], self.dim[1])
         pygame.draw.rect(screen, (0,0,0), self.rect)
+
+    def gravity(self, gravity:float) -> None:
+        """ Apply gravity to the player """
+        self.pos[1] += gravity
 
 def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
     ''' In this game u want to avoid enemies falling from the sky '''
@@ -25,7 +29,7 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
     PLAYER_HEIGHT = 100*coef[0]
     
     mov_speed_x = 10*coef[0]
-    mov_speed_y = 10*coef[1]
+    mov_speed_y = 5*coef[1]
     
     player = Player([1920*coef[0]* 2/6 - PLAYER_WIDTH /2, 1080*coef[1]*2/3  - PLAYER_HEIGHT], [PLAYER_WIDTH, PLAYER_HEIGHT] )
     mov_up = False
@@ -44,6 +48,8 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
         screen.fill((120,50,70))
         player.draw(screen)
         for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_e:
                     running = False
@@ -65,6 +71,8 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
                 if event.key == pygame.K_RIGHT:
                     mov_right = False
 
+        gravity = 1*coef[1]
+
         # Gestion des mouvements et des collisions
         if mov_up and BORDER_UP < player.pos[1] - 1*coef[1]:
             player.pos[1] -= mov_speed_y
@@ -74,5 +82,8 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
             player.pos[0] -= mov_speed_x
         if mov_right and BORDER_RIGHT - PLAYER_WIDTH > player.pos[0] + 1*coef[0]:
             player.pos[0] += mov_speed_x
+
+        if player.pos[1] < BORDER_DOWN - PLAYER_HEIGHT:
+            player.gravity(gravity)
 
         pygame.display.update()

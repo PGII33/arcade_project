@@ -17,7 +17,9 @@ screen = pygame.display.set_mode((SCREEN_WEIGHT//1.5, SCREEN_HEIGHT//1.5))
 RUNNING = True
 while RUNNING:
     screen.fill((123,123,123))
-    for event in pygame.event.get():
+    for event in pygame.event.get():            
+        if event.type == pygame.QUIT:
+            RUNNING = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_e:
                 RUNNING = False
