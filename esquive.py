@@ -39,8 +39,10 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
     BORDER_RIGHT = 1920*coef[0] * 2/3
     BORDER_UP = 0
     BORDER_DOWN = 1080*coef[1] * 2/3
-    PLAYER_WIDTH = 50*coef[1]
-    PLAYER_HEIGHT = 50*coef[0]
+    PLAYER_WIDTH = 50*coef[0]
+    PLAYER_HEIGHT = 50*coef[1]
+    ENNEMIE_WIDTH = 10*coef[0]
+    ENNEMIE_HEIGHT = 10*coef[1]
     FPS = 60
 
     gravity = 1*coef[1]
@@ -78,23 +80,24 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
                 if event.key == pygame.K_e:
                     running = False
                     menu(screen, True, coef, elapsed_time)
-                if event.key == pygame.K_UP:
+                if event.key == pygame.K_UP or pygame.K_z:
                     mov_up = True
-                if event.key == pygame.K_DOWN:
+                if event.key == pygame.K_DOWN or pygame.K_s:
                     mov_down = True
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_LEFT or pygame.K_q:
                     mov_left = True
-                if event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_RIGHT or pygame.K_d:
                     mov_right = True
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_UP:
+                if event.key == pygame.K_UP or pygame.K_z:
                     mov_up = False
                     can_up = False
-                if event.key == pygame.K_DOWN:
+                elif event.key == pygame.K_DOWN or pygame.K_s:
                     mov_down = False
-                if event.key == pygame.K_LEFT:
+                    can_up = False
+                if event.key == pygame.K_LEFT or event.key == pygame.K_q:
                     mov_left = False
-                if event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     mov_right = False
 
         # Gestion des mouvements et des collisions avec les bords et la gravité
@@ -121,7 +124,7 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
 
         # Gestion des ennemies
         if number_of_ennemies < number_of_ennemies_max:
-            new_ennemie = Ennemie([randint(0, round(BORDER_RIGHT)), 0], [20*coef[0], 20*coef[1]])            
+            new_ennemie = Ennemie([randint(0, round(BORDER_RIGHT - ENNEMIE_WIDTH)), 0], [ENNEMIE_WIDTH, ENNEMIE_HEIGHT])            
             i = 0
             i_max = len(ennemies)
             for ennemie in ennemies:
