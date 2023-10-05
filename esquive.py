@@ -165,23 +165,31 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
 
         pygame.display.update()
 
-def menu(screen:pygame.Surface, running:bool, coef:tuple, score:str = 'Aucun Score')-> None:
+def menu(screen:pygame.Surface, running:bool, coef:tuple, score:int = 0)-> None:
     ''' The menu of the game '''
     # Variables
-    score = str(score)
+    if score is not 0:
+        score = f"Votre score est de {score} milisecondes"
+    else:
+        score = "Aucun score enregistré"
     FPS = 60
     font = pygame.font.Font(None, 36)
     text = font.render("Press A to start", True, (255, 255, 255))
     text_rect = text.get_rect()
     text_rect.center = (1920*coef[0]//3, 1080*coef[1]//3)
+    
+    text2 = font.render("Press E to go to the Main Menu", True, (255, 255, 255))
+    text2_rect = text2.get_rect()
+    text2_rect.center = (1920*coef[0]//3, 1080*coef[1]//3 + 100*coef[1])
 
     text_score = font.render(score, True, (255, 255, 255))
     text_score_rect = text.get_rect()
-    text_score_rect.center = (1920*coef[0]//3, 1080*coef[1]//3 + 50*coef[1])
+    text_score_rect.center = (1920*coef[0]//3 - 50*coef[0], 1080*coef[1]//3 + 50*coef[1])
     # Boucle while
     while running :
         screen.fill((120,50,70))
         screen.blit(text, text_rect)
+        screen.blit(text2, text2_rect)
         screen.blit(text_score, text_score_rect)
 
         # Gestion des fps
