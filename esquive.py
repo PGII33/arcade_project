@@ -41,12 +41,13 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
     BORDER_DOWN = 1080*coef[1] * 2/3
     PLAYER_WIDTH = 50*coef[1]
     PLAYER_HEIGHT = 50*coef[0]
+    FPS = 120
 
+    gravity = 1*coef[1]
     mov_speed_x = 10*coef[0]
     mov_speed_y = 5*coef[1]
     elapsed_time = 0
     not_up = 0
-    gravity = 1*coef[1]
     saut_max = 300
     number_of_ennemies_max = 0
     number_of_ennemies = 0
@@ -65,7 +66,7 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
 
         # Gestion des fps
         clock = pygame.time.Clock()
-        dt = clock.tick(60)
+        dt = clock.tick(FPS)
 
         # Gestion des evenements
         screen.fill((120,50,70))
@@ -87,6 +88,7 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP:
                     mov_up = False
+                    can_up = False
                 if event.key == pygame.K_DOWN:
                     mov_down = False
                 if event.key == pygame.K_LEFT:
@@ -95,10 +97,10 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
                     mov_right = False
 
         # Gestion des mouvements et des collisions avec les bords et la gravité
-        if mov_up and BORDER_UP < player.pos[1] - 1*coef[1] and not_up > -saut_max*coef[1] and can_up:
-            player.pos[1] -= mov_speed_y
-            not_up -= 10*coef[1]
-            if not_up <= -saut_max*coef[1]:
+        if mov_up and BORDER_UP < player.pos[1] - 1*coef[1] and not_up > -saut_max and can_up:
+            player.pos[1] -= (mov_speed_y + gravity)
+            not_up -= 10
+            if not_up <= -saut_max:
                 can_up = False
         if can_up is False and not_up < 0 :
             if player.pos[1] >= round(BORDER_DOWN - PLAYER_HEIGHT) :
