@@ -103,8 +103,8 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
             not_up -= 10
             if not_up <= -saut_max:
                 can_up = False
-        if can_up is False and not_up < 0 :
-            if player.pos[1] >= round(BORDER_DOWN - PLAYER_HEIGHT) :
+        if can_up is False and not_up <= 0 :
+            if player.pos[1] >= round(BORDER_DOWN - PLAYER_HEIGHT):
                 not_up = 0
                 can_up = True
         if player.pos[1] == BORDER_DOWN - PLAYER_HEIGHT:
@@ -117,12 +117,24 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
             player.pos[0] += mov_speed_x
 
         if player.pos[1] < BORDER_DOWN - PLAYER_HEIGHT:
-            player.gravity(gravity)
+            player.gravity(gravity*1.1)
 
         # Gestion des ennemies
         if number_of_ennemies < number_of_ennemies_max:
-            ennemies.append(Ennemie([randint(0, round(BORDER_RIGHT)), 0], [20*coef[0], 20*coef[1]]))
-            number_of_ennemies +=1
+            new_ennemie = Ennemie([randint(0, round(BORDER_RIGHT)), 0], [20*coef[0], 20*coef[1]])            
+            i = 0
+            i_max = len(ennemies)
+            for ennemie in ennemies:
+                if not new_ennemie.rect.colliderect(ennemie.rect) :
+                    i +=1
+                    if i == i_max:
+                        ennemies.append(new_ennemie)
+                        number_of_ennemies +=1
+                else:
+                    break
+            if ennemies == []:
+                ennemies.append(new_ennemie)
+                number_of_ennemies +=1
         for ennemie in ennemies:
             ennemie.draw(screen)
             ennemie.pos[1] += gravity
