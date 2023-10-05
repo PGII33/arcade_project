@@ -1,6 +1,7 @@
 ''' An Arcade Project '''
 import pygame
-import esquive, pong
+import esquive
+import pong
 import display_class as dis
 
 #To get the screen values
