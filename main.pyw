@@ -1,6 +1,7 @@
 ''' An Arcade Project '''
 import pygame
 import esquive
+import display_class as dis
 
 #To get the screen values
 pygame.init()
@@ -14,10 +15,18 @@ pygame.quit()
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WEIGHT//1.5, SCREEN_HEIGHT//1.5))
 
+Button_esquive_game = dis.ButtonText((round(10*coef[0]), round(10*coef[0])),
+                                     (round(150*coef[0]), round(30*coef[1])),
+                                     (123, 0, 0),
+                                     "Esquive Game",
+                                     round(20*coef[0]))
+
 RUNNING = True
 while RUNNING:
     screen.fill((123,123,123))
-    for event in pygame.event.get():           
+    if Button_esquive_game.draw(screen):
+        esquive.menu(screen, True, coef)
+    for event in pygame.event.get():  
         if event.type == pygame.QUIT:
             RUNNING = False
         if event.type == pygame.KEYDOWN:

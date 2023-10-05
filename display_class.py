@@ -68,7 +68,7 @@ class ButtonText:
             self.clicked = False
             return False
 
-    def show(self, surface) -> bool:
+    def draw(self, surface) -> bool:
         ''' Show the button '''
         if self.is_hover():
             surface.blit(self.hoverlight_button, (self.pos_x, self.pos_y))
@@ -180,7 +180,7 @@ class Button:
             self.clicked = False
             return False
 
-    def show(self, surface) -> bool:
+    def draw(self, surface) -> bool:
         ''' Show the button '''
         if self.is_hover():
             surface.blit(self.hoverlight_button, (self.pos_x, self.pos_y))
@@ -238,7 +238,7 @@ class Bar:
         self.value = value
         self.max_value = max_value
 
-    def show(self, surface):
+    def draw(self, surface):
         ''' Show the bar '''
         actual_value = round(self.width * self.value / self.max_value, 90)
         if self.value > self.max_value:
@@ -306,7 +306,7 @@ class ImageButton:
             self.clicked = False
             return False
 
-    def show(self, surface) -> bool:
+    def draw(self, surface) -> bool:
         ''' Show the button '''
         if self.is_hover():
             surface.blit(self.image_transp, (self.pos_x, self.pos_y))
@@ -361,60 +361,3 @@ class Entry:
                 action = True
         surface.blit(self.font.render(self.text, True, self.text_color), (self.pos[0],self.pos[1]))
         return action
-
-class Model1:
-    'Model 1 for the game Idle RPG'
-    def __init__(self, pos , image, currency_image, level, text, stat_before, stat_after, price)-> None: #pylint: disable=line-too-long
-        'Init'
-        self.posx, self.posy = pos
-        self.image = image
-        self.currencyimage = currency_image
-        self.level = level
-        self.stat_before, self.stat_after = stat_before, stat_after
-        self.button = ButtonText((self.posx + 385, self.posy + 10), (85,35), (140,140,236), price, font_size=27) #pylint: disable=line-too-long
-        self.stat_text = Text(self.posx + 100, self.posy + 5, text, (0,0,0), 20, 'segoeuisemibold')
-        self.level_text = Text(self.posx + 250, self.posy + 5, 'Niveau : ' + self.level, (0,0,0), 20, 'segoeuisemibold')
-        self.comparison_text = Text(self.posx + 100, self.posy + 25, str(stat_before) + ' --> ' + str(stat_after), (0,0,0), 20, 'segoeuisemibold') #pylint: disable=line-too-long
-
-    def actualise(self, level, stat_before, stat_after, price)-> None:
-        'actualise button vars'
-        self.level = level
-        self.stat_before, self.stat_after = stat_before, stat_after
-        self.button.text = price
-        self.level_text.text = 'Niveau : ' + str(level)
-        self.comparison_text.text = str(stat_before) + ' --> ' + str(stat_after)
-
-    def draw(self, surface)-> None:
-        'Draw the Surface'
-        self.stat_text.draw(surface)
-        self.level_text.draw(surface)
-        self.comparison_text.draw(surface)
-        surface.blit(self.image, (self.posx + 20, self.posy))
-        surface.blit(self.currencyimage, (self.posx + 470, self.posy + 15))
-
-class Model2:
-    'Model 1 for the game Idle RPG'
-    def __init__(self, pos , image, currency_image, level_required, stat_before, stat_after)-> None: #pylint: disable=line-too-long
-        'Init'
-        self.posx, self.posy = pos
-        self.image = image
-        self.currencyimage = currency_image
-        self.level_required = level_required
-        self.stat_before, self.stat_after = stat_before, stat_after
-        self.button = ButtonText((self.posx + 325, self.posy + 30), (100,17), (140,140,236), 'Change Aura', font_size=27) #pylint: disable=line-too-long
-        self.stat_text = Text(self.posx + 100, self.posy + 5, 'Boost', (0,0,0), 20, 'segoeuisemibold')
-        self.level_text = Text(self.posx + 250, self.posy + 5, 'Niveau Requis : ' + self.level_required, (0,0,0), 20, 'segoeuisemibold')
-        self.comparison_text = Text(self.posx + 100, self.posy + 25, str(stat_before) + ' --> ' + str(stat_after), (0,0,0), 20, 'segoeuisemibold') #pylint: disable=line-too-long
-
-    def actualise(self, stat_before, stat_after)-> None:
-        'actualise button vars'
-        self.stat_before, self.stat_after = stat_before, stat_after
-        self.comparison_text.text = str(stat_before) + ' --> ' + str(stat_after)
-
-    def draw(self, surface)-> None:
-        'Draw the Surface'
-        self.stat_text.draw(surface)
-        self.level_text.draw(surface)
-        self.comparison_text.draw(surface)
-        surface.blit(self.image, (self.posx + 20, self.posy))
-        surface.blit(self.currencyimage, (self.posx + 465, self.posy + 15))
