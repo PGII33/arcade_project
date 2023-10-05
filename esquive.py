@@ -80,19 +80,19 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
                 if event.key == pygame.K_e:
                     running = False
                     menu(screen, True, coef, elapsed_time)
-                if event.key == pygame.K_UP or pygame.K_z:
+                if event.key == pygame.K_UP or event.key == pygame.K_z:
                     mov_up = True
-                if event.key == pygame.K_DOWN or pygame.K_s:
+                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     mov_down = True
-                if event.key == pygame.K_LEFT or pygame.K_q:
+                if event.key == pygame.K_LEFT or event.key == pygame.K_q:
                     mov_left = True
-                if event.key == pygame.K_RIGHT or pygame.K_d:
+                if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     mov_right = True
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_UP or pygame.K_z:
+                if event.key == pygame.K_UP or event.key == pygame.K_z:
                     mov_up = False
                     can_up = False
-                elif event.key == pygame.K_DOWN or pygame.K_s:
+                elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     mov_down = False
                     can_up = False
                 if event.key == pygame.K_LEFT or event.key == pygame.K_q:
