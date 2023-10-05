@@ -1,5 +1,6 @@
 """ The game where u need to avoid balls """
-import pygame as pygame
+from random import randint
+import pygame
 
 class Player:
     """ The player """
@@ -18,6 +19,19 @@ class Player:
         """ Apply gravity to the player """
         self.pos[1] += gravity
 
+class Ennemie:
+    ''' Ennemie '''
+    def __init__(self, pos:list, dim:list) -> None:
+        self.pos = pos
+        self.dim = dim
+        self.rect = pygame.Rect(pos[0], pos[1], dim[0], dim[1])
+
+    def draw(self, screen:pygame.Surface) -> None:
+        """ Draw the ennemie """
+        self.pos = [round(self.pos[0]), round(self.pos[1])]
+        self.rect = pygame.Rect(self.pos[0], self.pos[1], self.dim[0], self.dim[1])
+        pygame.draw.rect(screen, (255,0,0), self.rect)
+
 def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
     ''' In this game u want to avoid enemies falling from the sky '''
     # Variables
@@ -26,24 +40,33 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
     BORDER_UP = 0
     BORDER_DOWN = 1080*coef[1] * 2/3
     PLAYER_WIDTH = 50*coef[1]
-    PLAYER_HEIGHT = 100*coef[0]
-    
+    PLAYER_HEIGHT = 50*coef[0]
+
     mov_speed_x = 10*coef[0]
     mov_speed_y = 5*coef[1]
-    
+    elapsed_time = 0
+    not_up = 0
+    gravity = 1*coef[1]
+    saut_max = 300
+    number_of_ennemies_max = 0
+    number_of_ennemies = 0
+
+    ennemies = []
+
     player = Player([1920*coef[0]* 2/6 - PLAYER_WIDTH /2, 1080*coef[1]*2/3  - PLAYER_HEIGHT], [PLAYER_WIDTH, PLAYER_HEIGHT] )
     mov_up = False
     mov_down = False
     mov_left = False
     mov_right = False
+    can_up = True
 
     # Boucle while
     while running :
-        
+
         # Gestion des fps
         clock = pygame.time.Clock()
-        clock.tick(60)
-        
+        dt = clock.tick(60)
+
         # Gestion des evenements
         screen.fill((120,50,70))
         player.draw(screen)
@@ -71,12 +94,19 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
                 if event.key == pygame.K_RIGHT:
                     mov_right = False
 
-        gravity = 1*coef[1]
-
-        # Gestion des mouvements et des collisions
-        if mov_up and BORDER_UP < player.pos[1] - 1*coef[1]:
+        # Gestion des mouvements et des collisions avec les bords et la gravité
+        if mov_up and BORDER_UP < player.pos[1] - 1*coef[1] and not_up > -saut_max*coef[1] and can_up:
             player.pos[1] -= mov_speed_y
-        if mov_down and BORDER_DOWN - PLAYER_HEIGHT > player.pos[1] + 1*coef[1] :
+            not_up -= 10*coef[1]
+            if not_up <= -saut_max*coef[1]:
+                can_up = False
+        if can_up is False and not_up < 0 :
+            if player.pos[1] >= round(BORDER_DOWN - PLAYER_HEIGHT) :
+                not_up = 0
+                can_up = True
+        if player.pos[1] == BORDER_DOWN - PLAYER_HEIGHT:
+            not_up = 0
+        if mov_down and round(BORDER_DOWN - PLAYER_HEIGHT) > player.pos[1] + 1*coef[1]:
             player.pos[1] += mov_speed_y
         if mov_left and BORDER_LEFT < player.pos[0] - 1*coef[0]:
             player.pos[0] -= mov_speed_x
@@ -85,5 +115,33 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
 
         if player.pos[1] < BORDER_DOWN - PLAYER_HEIGHT:
             player.gravity(gravity)
+
+        # Gestion des ennemies
+        if number_of_ennemies < number_of_ennemies_max:
+            ennemies.append(Ennemie([randint(0, round(BORDER_RIGHT)), 0], [20*coef[0], 20*coef[1]]))
+            number_of_ennemies +=1
+        for ennemie in ennemies:
+            ennemie.draw(screen)
+            ennemie.pos[1] += gravity
+            if ennemie.pos[1] > BORDER_DOWN:
+                ennemies.remove(ennemie)
+                number_of_ennemies -= 1
+            if ennemie.rect.colliderect(player.rect):
+                running = False
+
+
+        elapsed_time += dt
+
+        # Gestion de la difficulté
+        if elapsed_time > number_of_ennemies_max*1000 +1000:
+            number_of_ennemies_max += 1
+            gravity += 0.1*coef[1]
+        
+        # Gestion de l'affichage du score en temps réel
+        font = pygame.font.Font(None, 36)
+        text = font.render(f"Temps écoulé : {elapsed_time / 1000:.2f} secondes", True, (255, 255, 255))
+        text_rect = text.get_rect()
+        text_rect.center = (200, 50)
+        screen.blit(text, text_rect)
 
         pygame.display.update()

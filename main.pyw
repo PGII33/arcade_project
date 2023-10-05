@@ -6,8 +6,8 @@ import esquive
 pygame.init()
 screen = pygame.display.set_mode()
 SCREEN_WEIGHT, SCREEN_HEIGHT = screen.get_size()
-WEIGHT_COEF = SCREEN_WEIGHT/1920
-HEIGHT_COEF = SCREEN_HEIGHT/1080
+WEIGHT_COEF = round(SCREEN_WEIGHT/1920, 3)
+HEIGHT_COEF = round(SCREEN_HEIGHT/1080, 3)
 coef = (WEIGHT_COEF, HEIGHT_COEF)
 pygame.quit()
 
@@ -17,7 +17,7 @@ screen = pygame.display.set_mode((SCREEN_WEIGHT//1.5, SCREEN_HEIGHT//1.5))
 RUNNING = True
 while RUNNING:
     screen.fill((123,123,123))
-    for event in pygame.event.get():            
+    for event in pygame.event.get():           
         if event.type == pygame.QUIT:
             RUNNING = False
         if event.type == pygame.KEYDOWN:
