@@ -20,12 +20,18 @@ Button_esquive_game = dis.ButtonText((round(10*coef[0]), round(10*coef[0])),
                                      (123, 0, 0),
                                      "Esquive Game",
                                      round(20*coef[0]))
-
+Button_pong_game = dis.ButtonText((round(10*coef[0]), round(50*coef[0])),
+                                  (round(150*coef[0]), round(30*coef[1])),
+                                  (123, 0, 0),
+                                  "Pong Game",
+                                  round(20*coef[0]))
 RUNNING = True
 while RUNNING:
     screen.fill((123,123,123))
     if Button_esquive_game.draw(screen):
         esquive.menu(screen, True, coef)
+    if Button_pong_game.draw(screen):
+        pong.pong(screen, True, coef)
     for event in pygame.event.get():  
         if event.type == pygame.QUIT:
             RUNNING = False
