@@ -1,6 +1,6 @@
 ''' An Arcade Project '''
 import pygame
-import esquive
+import esquive, pong
 import display_class as dis
 
 #To get the screen values
@@ -33,7 +33,7 @@ while RUNNING:
             if event.key == pygame.K_e:
                 RUNNING = False
             elif event.key == pygame.K_a:
-                esquive.menu(screen, True, coef)
+                pong.pong(screen, True, coef)
     pygame.display.update()
 
 pygame.display.quit()
