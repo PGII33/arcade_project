@@ -41,7 +41,7 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
     BORDER_DOWN = 1080*coef[1] * 2/3
     PLAYER_WIDTH = 50*coef[1]
     PLAYER_HEIGHT = 50*coef[0]
-    FPS = 120
+    FPS = 60
 
     gravity = 1*coef[1]
     mov_speed_x = 10*coef[0]
@@ -77,6 +77,7 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_e:
                     running = False
+                    menu(screen, True, coef, elapsed_time)
                 if event.key == pygame.K_UP:
                     mov_up = True
                 if event.key == pygame.K_DOWN:
@@ -130,6 +131,7 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
                 number_of_ennemies -= 1
             if ennemie.rect.colliderect(player.rect):
                 running = False
+                menu(screen, True, coef, elapsed_time)
 
 
         elapsed_time += dt
@@ -138,12 +140,48 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
         if elapsed_time > number_of_ennemies_max*1000 +1000:
             number_of_ennemies_max += 1
             gravity += 0.1*coef[1]
-        
+
         # Gestion de l'affichage du score en temps réel
         font = pygame.font.Font(None, 36)
         text = font.render(f"Temps écoulé : {elapsed_time / 1000:.2f} secondes", True, (255, 255, 255))
         text_rect = text.get_rect()
         text_rect.center = (200, 50)
         screen.blit(text, text_rect)
+
+        pygame.display.update()
+
+def menu(screen:pygame.Surface, running:bool, coef:tuple, score:str = 'Aucun Score')-> None:
+    ''' The menu of the game '''
+    # Variables
+    score = str(score)
+    FPS = 60
+    font = pygame.font.Font(None, 36)
+    text = font.render("Press A to start", True, (255, 255, 255))
+    text_rect = text.get_rect()
+    text_rect.center = (1920*coef[0]//3, 1080*coef[1]//3)
+
+    text_score = font.render(score, True, (255, 255, 255))
+    text_score_rect = text.get_rect()
+    text_score_rect.center = (1920*coef[0]//3, 1080*coef[1]//3 + 50*coef[1])
+    # Boucle while
+    while running :
+        screen.fill((120,50,70))
+        screen.blit(text, text_rect)
+        screen.blit(text_score, text_score_rect)
+
+        # Gestion des fps
+        clock = pygame.time.Clock()
+        dt = clock.tick(FPS)
+
+        # Gestion des evenements
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_e:
+                    running = False
+                elif event.key == pygame.K_a:
+                    running = False
+                    esquive_game(screen, True, coef)
 
         pygame.display.update()

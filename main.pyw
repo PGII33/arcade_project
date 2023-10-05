@@ -24,7 +24,7 @@ while RUNNING:
             if event.key == pygame.K_e:
                 RUNNING = False
             elif event.key == pygame.K_a:
-                esquive.esquive_game(screen, True, coef)
+                esquive.menu(screen, True, coef)
     pygame.display.update()
 
 pygame.display.quit()
