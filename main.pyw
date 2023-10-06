@@ -2,6 +2,7 @@
 import pygame
 import esquive
 import pong
+import snake
 import display_class as dis
 
 #To get the screen values
@@ -18,12 +19,12 @@ screen = pygame.display.set_mode((SCREEN_WEIGHT//1.5, SCREEN_HEIGHT//1.5))
 
 Button_esquive_game = dis.ButtonText((round(10*coef[0]), round(10*coef[0])),
                                      (round(150*coef[0]), round(30*coef[1])),
-                                     (123, 0, 0),
+                                     (198, 170, 120),
                                      "Esquive Game",
                                      round(20*coef[0]))
 Button_pong_game = dis.ButtonText((round(10*coef[0]), round(50*coef[0])),
                                   (round(150*coef[0]), round(30*coef[1])),
-                                  (123, 0, 0),
+                                  (198, 170, 120),
                                   "Pong Game",
                                   round(20*coef[0]))
 RUNNING = True
@@ -33,14 +34,15 @@ while RUNNING:
         esquive.menu(screen, True, coef)
     if Button_pong_game.draw(screen):
         pong.pong(screen, True, coef)
-    for event in pygame.event.get():  
+    for event in pygame.event.get():
         if event.type == pygame.QUIT:
             RUNNING = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_e:
                 RUNNING = False
             elif event.key == pygame.K_a:
-                pong.pong(screen, True, coef)
+                snake.snake(screen, True, coef)
     pygame.display.update()
 
 pygame.display.quit()
+pygame.quit()

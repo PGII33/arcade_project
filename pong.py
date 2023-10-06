@@ -47,7 +47,7 @@ def pong(screen:pygame.Surface, running:bool, coef:tuple)-> None:
     up2, down2 = False, False
 
     while running:
-        
+
         # Gestion du temps
         clock = pygame.time.Clock()
         dt = clock.tick(FPS)
@@ -91,16 +91,12 @@ def pong(screen:pygame.Surface, running:bool, coef:tuple)-> None:
         # Gestion des collisions balle joueurs et de la vitesse de la balle 
         if player1.rect.colliderect(ball.pos[0], ball.pos[1], ball.dim, ball.dim) or player2.rect.colliderect(ball.pos[0], ball.pos[1], ball.dim, ball.dim):
             velocity[0] = -velocity[0]
-            velocity[1] += randint(-2, 2)*coef[1]
-            velocity[1] = -velocity[1]
             time_speed_velocity += 0.01
         if ball.pos[1] < BORDER_UP or ball.pos[1] > BORDER_DOWN:
             velocity[1] = -velocity[1]
             ball.pos[1] += velocity[1] * time_speed_velocity
         if ball.pos[0] < 0 or ball.pos[0] > 1920*coef[0]*2/3:
             running = False
-
-        print(ball.pos)
 
         # Gestion des mouvements des joueurs
         if up1 and player1.pos[1] > BORDER_UP - move_y:

@@ -41,8 +41,8 @@ def esquive_game(screen:pygame.Surface, running:bool, coef:tuple)-> None:
     BORDER_DOWN = 1080*coef[1] * 2/3
     PLAYER_WIDTH = 50*coef[0]
     PLAYER_HEIGHT = 50*coef[1]
-    ENNEMIE_WIDTH = 10*coef[0]
-    ENNEMIE_HEIGHT = 10*coef[1]
+    ENNEMIE_WIDTH = 30*coef[0]
+    ENNEMIE_HEIGHT = 30*coef[1]
     FPS = 60
 
     gravity = 1*coef[1]
